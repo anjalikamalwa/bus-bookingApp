@@ -25,17 +25,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve static files from 'front-end/build'
-app.use(express.static(path.join(__dirname, 'front-end', 'build')));
-app.use('/api/assets', express.static(path.join(__dirname, 'assets')));
+// app.use(express.static(path.join(__dirname, 'front-end', 'build')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // API routes
 app.use("/api/bus", router);
 app.use("/api/booking", router1);
 
 // Serve the frontend app for any other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'front-end', 'build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'front-end', 'build', 'index.html'));
+// });
 
 app.use(errorHandler);
 
