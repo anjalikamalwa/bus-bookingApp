@@ -215,6 +215,7 @@
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
   .bus-details {
+    flex-direction: column;
     padding: 10px; 
   }
 
