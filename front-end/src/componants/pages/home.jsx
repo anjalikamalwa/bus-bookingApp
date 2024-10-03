@@ -42,6 +42,7 @@ const Home = () => {
       setShowform(false);
     } catch (error) {
       console.error(error);
+      alert(error.message);
     }
   };
 
@@ -81,7 +82,7 @@ const Home = () => {
               type="date"
               name="journey_date"
               placeholder="journey date"
-              format= "yyyy-mm-dd"
+              format="yyyy-mm-dd"
               value={journey_date}
               onChange={(e) => setJourneyDate(e.target.value)}
             />
@@ -111,7 +112,9 @@ const Home = () => {
                     <span>${data.fare}</span>
                   </div>
                   <div className="btn">
-                    <button onClick={() => handleBook(data._id)}>Book now</button>
+                    <button onClick={() => handleBook(data._id)}>
+                      Book now
+                    </button>
                   </div>
                 </div>
               </div>
