@@ -374,3 +374,9 @@ button:hover {
   text-align: center;
   margin-top: 20px;
 }
+
+
+.error{
+  color: red;
+  font-weight: 600;
+}

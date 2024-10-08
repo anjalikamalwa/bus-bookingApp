@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import moment from "moment";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
@@ -10,24 +10,25 @@ const Home = () => {
   const [destination, setDestination] = useState("");
   const [journey_date, setJourneyDate] = useState("");
   const [busesdata, setBusesData] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const [showForm, setShowform] = useState(true);
 
   const navigate = useNavigate();
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/bus`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const result = await response.json();
-      //   setBlogs(result);
-      // console.log(busesdata)
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
+  const validateInputs = () => {
+    const newErrors = {};
+    if (!source.trim()) {
+      newErrors.source = "Departure city is required";
+    }
+    if (!destination.trim()) {
+      newErrors.destination = "Arrival city is required";
+    }
+    if (!journey_date) {
+      newErrors.journey_date = "Journey date is required";
+    }
+    return newErrors;
+  };
   const searchBuses = async () => {
     try {
       const response = await fetch(
@@ -48,12 +49,21 @@ const Home = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    searchBuses();
+    const validationErrors = validateInputs();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+    } else {
+      setErrors({});
+      searchBuses();
+    }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+
+
+  const handleInputChange = (setter, field) => (e) => {
+    setter(e.target.value);
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: "" })); 
+  };
   const handleBook = (id) => {
     navigate(`/bus-book/${id}`);
   };
@@ -69,23 +79,33 @@ const Home = () => {
               name="source"
               placeholder="departure city"
               value={source}
-              onChange={(e) => setSource(e.target.value)}
+              onChange={handleInputChange(setSource, "source")}
             />
+            {errors.source && <p className="error">{errors.source}</p>}
             <input
               type="text"
               name="destination"
               placeholder="arrival city"
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              onChange={handleInputChange(setDestination, "destination")}
             />
+            {errors.destination && (
+              <p className="error">{errors.destination}</p>
+            )}
+
             <input
               type="date"
               name="journey_date"
               placeholder="journey date"
               format="yyyy-mm-dd"
               value={journey_date}
-              onChange={(e) => setJourneyDate(e.target.value)}
+              onChange={handleInputChange(setJourneyDate, "journey_date")}
+
             />
+            {errors.journey_date && (
+              <p className="error">{errors.journey_date}</p>
+            )}
+
             <div className="btn">
               <button type="submit">Search</button>
             </div>
